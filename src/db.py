@@ -78,16 +78,17 @@ def client_add(args):
 def client_list(args):
     db = get_db()
     limit = clamp_limit(args.limit)
-    q, params = "SELECT * FROM clients", []
+    where_clauses, params = [], []
     if args.status:
-        q += " WHERE status=?"; params.append(args.status)
+        where_clauses.append("status=?"); params.append(args.status)
     if args.search:
-        clause = " WHERE " if "WHERE" not in q else " AND "
-        q += f"{clause}(name LIKE ? OR needs LIKE ?)"; params += [f"%{args.search}%"]*2
+        where_clauses.append("(name LIKE ? OR needs LIKE ?)"); params += [f"%{args.search}%"]*2
+    where_sql = f" WHERE {' AND '.join(where_clauses)}" if where_clauses else ""
+    q = f"SELECT * FROM clients{where_sql}"
     q += f" ORDER BY last_contact DESC LIMIT ? OFFSET ?"
     params += [limit, args.offset]
     rows = [dict(r) for r in db.execute(q, params).fetchall()]
-    total = db.execute("SELECT COUNT(*) FROM clients").fetchone()[0]
+    total = db.execute(f"SELECT COUNT(*) FROM clients{where_sql}", params[:-2]).fetchone()[0]
     log(f"📋 客户列表: 返回 {len(rows)} 条 (共 {total} 条)")
     out({"total": total, "returned": len(rows), "offset": args.offset, "clients": rows})
 
@@ -112,7 +113,12 @@ def client_update(args):
             sets.append(f"{k}=?"); vals.append(v)
     sets.append("last_contact=?"); vals.append(date.today().isoformat())
     vals.append(args.id)
-    db.execute(f"UPDATE clients SET {','.join(sets)} WHERE id=?", vals)
+    cur = db.execute(f"UPDATE clients SET {','.join(sets)} WHERE id=?", vals)
+    if cur.rowcount == 0:
+        db.rollback()
+        log(f"❌ 客户 ID:{args.id} 不存在")
+        out({"ok": False, "error": f"client {args.id} not found"})
+        sys.exit(1)
     db.commit()
     log(f"✅ 客户 ID:{args.id} 已更新")
     out({"ok": True, "id": args.id})
@@ -173,16 +179,17 @@ def content_add(args):
 def content_list(args):
     db = get_db()
     limit = clamp_limit(args.limit)
-    q, params = "SELECT * FROM content_log", []
+    where_clauses, params = [], []
     if args.status:
-        q += " WHERE status=?"; params.append(args.status)
+        where_clauses.append("status=?"); params.append(args.status)
     if args.platform:
-        clause = " WHERE " if "WHERE" not in q else " AND "
-        q += f"{clause}platform=?"; params.append(args.platform)
+        where_clauses.append("platform=?"); params.append(args.platform)
+    where_sql = f" WHERE {' AND '.join(where_clauses)}" if where_clauses else ""
+    q = f"SELECT * FROM content_log{where_sql}"
     q += f" ORDER BY created_at DESC LIMIT ? OFFSET ?"
     params += [limit, args.offset]
     rows = [dict(r) for r in db.execute(q, params).fetchall()]
-    total = db.execute("SELECT COUNT(*) FROM content_log").fetchone()[0]
+    total = db.execute(f"SELECT COUNT(*) FROM content_log{where_sql}", params[:-2]).fetchone()[0]
     log(f"📋 内容列表: 返回 {len(rows)} 条 (共 {total} 条)")
     out({"total": total, "returned": len(rows), "content": rows})
 
@@ -199,7 +206,10 @@ def dashboard(args):
     inc = db.execute("SELECT COALESCE(SUM(amount),0) FROM ledger WHERE type='income' AND strftime('%Y-%m',date)=?", (month,)).fetchone()[0]
     exp = db.execute("SELECT COALESCE(SUM(amount),0) FROM ledger WHERE type='expense' AND strftime('%Y-%m',date)=?", (month,)).fetchone()[0]
     content_total = db.execute("SELECT COUNT(*) FROM content_log").fetchone()[0]
-    content_month = db.execute("SELECT COUNT(*) FROM content_log WHERE strftime('%Y-%m',created_at)=?", (month,)).fetchone()[0]
+    content_month = db.execute(
+        "SELECT COUNT(*) FROM content_log WHERE status='published' AND publish_date IS NOT NULL AND strftime('%Y-%m',publish_date)=?",
+        (month,),
+    ).fetchone()[0]
     log(f"📊 仪表盘: 客户 {clients_total} | 收入 ¥{inc} 支出 ¥{exp} | 内容 {content_total}")
     out({
         "clients": {"total": clients_total, "active": clients_active, "stale_3d": len(stale)},

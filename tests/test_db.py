@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 
 
@@ -146,11 +147,12 @@ class DbCliTestCase(unittest.TestCase):
         )
 
         _, list_active = self.run_cli("client", "list", "--status", "active", "--limit", "10")
-        self.assertEqual(list_active["total"], 3)
+        self.assertEqual(list_active["total"], 1)
         self.assertEqual(list_active["returned"], 1)
         self.assertEqual(list_active["clients"][0]["name"], "李经理")
 
         _, list_search = self.run_cli("client", "list", "--search", "VI", "--limit", "10")
+        self.assertEqual(list_search["total"], 1)
         self.assertEqual([client["name"] for client in list_search["clients"]], ["张总"])
 
         _, stale = self.run_cli("client", "stale", "--days", "3", "--limit", "10")
@@ -186,6 +188,19 @@ class DbCliTestCase(unittest.TestCase):
         self.assertEqual(count["total"], 3)
         self.assertEqual(count["by_status"]["active"], 2)
         self.assertEqual(count["by_status"]["closed"], 1)
+
+        failed, failed_data = self.run_cli(
+            "client",
+            "update",
+            "--id",
+            "9999",
+            "--data",
+            json.dumps({"status": "active"}, ensure_ascii=False),
+            check=False,
+        )
+        self.assertNotEqual(failed.returncode, 0)
+        self.assertFalse(failed_data["ok"])
+        self.assertIn("not found", failed_data["error"])
 
     def test_ledger_commands(self):
         self.run_cli("ledger", "income", "--amount", "1000", "--from", "张总", "--note", "首款")
@@ -237,14 +252,18 @@ class DbCliTestCase(unittest.TestCase):
         )
 
         _, published = self.run_cli("content", "list", "--status", "published", "--limit", "10")
-        self.assertEqual(published["total"], 2)
+        self.assertEqual(published["total"], 1)
         self.assertEqual(published["returned"], 1)
         self.assertEqual(published["content"][0]["title"], "Logo 设计避坑指南")
 
         _, xhs_only = self.run_cli("content", "list", "--platform", "小红书", "--limit", "10")
+        self.assertEqual(xhs_only["total"], 1)
         self.assertEqual([item["title"] for item in xhs_only["content"]], ["Logo 设计避坑指南"])
 
     def test_dashboard_command(self):
+        current_month = date.today().strftime("%Y-%m")
+        current_publish_date = f"{current_month}-15"
+
         _, client_one = self.run_cli(
             "client",
             "add",
@@ -276,6 +295,8 @@ class DbCliTestCase(unittest.TestCase):
             "图文",
             "--status",
             "published",
+            "--date",
+            current_publish_date,
         )
         self.run_cli(
             "content",
@@ -286,6 +307,10 @@ class DbCliTestCase(unittest.TestCase):
             "公众号",
             "--type",
             "长文",
+            "--status",
+            "published",
+            "--date",
+            "2024-01-10",
         )
 
         _, dashboard = self.run_cli("dashboard")
@@ -297,7 +322,7 @@ class DbCliTestCase(unittest.TestCase):
         self.assertEqual(dashboard["finance"]["expense"], 300.0)
         self.assertEqual(dashboard["finance"]["net"], 1200.0)
         self.assertEqual(dashboard["content"]["total"], 2)
-        self.assertEqual(dashboard["content"]["this_month"], 2)
+        self.assertEqual(dashboard["content"]["this_month"], 1)
         self.assertEqual(dashboard["stale_clients"][0]["name"], "李经理")
 
 
