@@ -1,0 +1,25 @@
+{
+  "industry": "内容创作者/自媒体",
+  "content": {
+    "platforms": ["小红书", "抖音", "公众号", "B站"],
+    "topics": ["生活方式", "个人成长", "好物推荐", "经验分享", "热点评论"],
+    "tone": "真实亲切，有个人风格，像朋友聊天，适当使用网络用语",
+    "posting_frequency": "每周 5-7 篇（多平台分发）"
+  },
+  "pricing": {
+    "unit": "按篇/按条",
+    "hourly_rate": 200,
+    "items": [
+      {"name": "小红书图文笔记", "price": 500, "days": 1, "includes": "文案+配图建议+标签优化"},
+      {"name": "公众号深度长文", "price": 2000, "days": 3, "includes": "2000-3000字原创+排版"},
+      {"name": "短视频脚本+拍摄指导", "price": 1000, "days": 2, "includes": "脚本+分镜+拍摄建议"},
+      {"name": "品牌合作软文", "price": 3000, "days": 3, "includes": "植入方案+内容创作+修改"},
+      {"name": "内容代运营（月）", "price": 8000, "days": 30, "includes": "12篇图文+8条短视频脚本+数据复盘"}
+    ]
+  },
+  "clients": {
+    "follow_up_days": 3,
+    "payment_terms": "全款预付，品牌合作可30%定金+70%发布后",
+    "revision_limit": 2
+  }
+}

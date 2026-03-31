@@ -1,0 +1,25 @@
+{
+  "industry": "独立开发者/技术外包",
+  "content": {
+    "platforms": ["掘金", "知乎", "GitHub", "公众号"],
+    "topics": ["技术教程", "开源项目", "工具推荐", "技术选型", "踩坑记录"],
+    "tone": "技术严谨但不枯燥，有实际代码和案例，偶尔吐槽",
+    "posting_frequency": "每周 2-3 篇"
+  },
+  "pricing": {
+    "unit": "项目制/人天",
+    "hourly_rate": 400,
+    "items": [
+      {"name": "企业官网开发", "price": 8000, "days": 15, "includes": "响应式设计+CMS后台+部署"},
+      {"name": "小程序开发", "price": 12000, "days": 20, "includes": "UI实现+后端API+微信审核"},
+      {"name": "API接口开发", "price": 5000, "days": 7, "includes": "接口开发+文档+部署"},
+      {"name": "Bug修复/技术咨询", "price": 500, "days": 1, "includes": "按小时计费，¥500/小时"},
+      {"name": "全栈MVP开发", "price": 25000, "days": 30, "includes": "产品设计+前后端+部署+1月维护"}
+    ]
+  },
+  "clients": {
+    "follow_up_days": 5,
+    "payment_terms": "首款30%启动，中期40%里程碑交付，尾款30%上线验收",
+    "revision_limit": 2
+  }
+}

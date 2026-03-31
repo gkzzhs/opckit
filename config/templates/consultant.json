@@ -1,0 +1,25 @@
+{
+  "industry": "咨询顾问/企业培训",
+  "content": {
+    "platforms": ["公众号", "知乎", "LinkedIn"],
+    "topics": ["行业洞察", "管理方法论", "案例分析", "培训干货", "咨询方法论"],
+    "tone": "权威专业，数据驱动，有框架有模型，适当引用经典理论",
+    "posting_frequency": "每周 2 篇深度长文"
+  },
+  "pricing": {
+    "unit": "项目制/人天",
+    "hourly_rate": 800,
+    "items": [
+      {"name": "企业咨询（半天）", "price": 5000, "days": 1, "includes": "4小时现场诊断+咨询报告"},
+      {"name": "企业内训（1天）", "price": 10000, "days": 3, "includes": "课件定制+6小时授课+课后答疑"},
+      {"name": "战略规划报告", "price": 20000, "days": 15, "includes": "调研+分析+规划报告+汇报"},
+      {"name": "1v1 教练辅导", "price": 2000, "days": 1, "includes": "2小时线上辅导+行动计划"},
+      {"name": "年度顾问服务", "price": 60000, "days": 365, "includes": "每月2次沟通+季度报告+随时咨询"}
+    ]
+  },
+  "clients": {
+    "follow_up_days": 7,
+    "payment_terms": "咨询类全款预付，项目类首款50%+尾款50%",
+    "revision_limit": 2
+  }
+}

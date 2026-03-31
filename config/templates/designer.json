@@ -1,0 +1,25 @@
+{
+  "industry": "UI/品牌设计师",
+  "content": {
+    "platforms": ["小红书", "站酷", "Dribbble"],
+    "topics": ["UI设计", "品牌设计", "包装设计", "作品展示", "设计工具分享"],
+    "tone": "专业但亲和，以作品展示为主，穿插设计思路和方法论",
+    "posting_frequency": "每周 3-4 篇"
+  },
+  "pricing": {
+    "unit": "项目制",
+    "hourly_rate": 300,
+    "items": [
+      {"name": "Logo 设计", "price": 3000, "days": 5, "includes": "3套方案初稿+1套定稿+源文件"},
+      {"name": "品牌 VI 全套", "price": 15000, "days": 20, "includes": "Logo+名片+信纸+PPT模板+品牌手册"},
+      {"name": "详情页设计", "price": 2000, "days": 3, "includes": "1页设计+2次修改+切图"},
+      {"name": "海报设计", "price": 800, "days": 2, "includes": "1版+1次修改+印刷文件"},
+      {"name": "UI界面设计", "price": 5000, "days": 10, "includes": "5页核心界面+设计规范+标注"}
+    ]
+  },
+  "clients": {
+    "follow_up_days": 3,
+    "payment_terms": "首款50%开工，尾款50%交付源文件",
+    "revision_limit": 3
+  }
+}
