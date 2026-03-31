@@ -24,7 +24,12 @@ metadata:
 1. 运行 `python3 {baseDir}/scripts/db.py init` 检查可用模板
 2. 检查 `~/.opckit/config/industry.json` 是否存在
 3. 若不存在 → 告知用户："你还没选择行业模板，先告诉我你的职业（设计师/开发者/咨询师/内容创作者），我帮你配置。"
-   - 用户回答后运行 `python3 {baseDir}/scripts/db.py init --template <模板名>`
+   - 职业与模板名映射：
+     - 设计师 → `designer`
+     - 开发者 → `developer`
+     - 咨询师 → `consultant`
+     - 内容创作者 → `creator`
+   - 用户回答后，按映射结果运行 `python3 {baseDir}/scripts/db.py init --template <designer|developer|consultant|creator>`
 4. 若存在 → 读取文件内容，加载以下参数用于后续所有能力：
    - `content.platforms` → 目标发布平台
    - `content.topics` → 行业相关话题方向

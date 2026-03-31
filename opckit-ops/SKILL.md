@@ -22,7 +22,11 @@ metadata:
 每次激活时先执行：
 
 1. 检查 `~/.opckit/config/industry.json` 是否存在
-2. 若不存在 → 告知用户选择行业模板，运行 `python3 {baseDir}/scripts/db.py init --template <模板名>`
+2. 若不存在 → 告知用户选择行业模板，并按以下映射运行初始化命令：
+   - 设计师 → `python3 {baseDir}/scripts/db.py init --template designer`
+   - 开发者 → `python3 {baseDir}/scripts/db.py init --template developer`
+   - 咨询师 → `python3 {baseDir}/scripts/db.py init --template consultant`
+   - 内容创作者 → `python3 {baseDir}/scripts/db.py init --template creator`
 3. 若存在 → 读取文件内容
 
 ## 能力 1：记账
