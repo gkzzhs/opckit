@@ -25,12 +25,11 @@ OPCKit 是一套运行在 [OpenClaw](https://github.com/anthropics/openclaw) 上
 
 - 已安装 [OpenClaw](https://github.com/anthropics/openclaw)
 - Python 3.10+
-- uv（Python 包管理器）
 
 ### 一键安装
 
 ```bash
-git clone https://github.com/yourname/opckit.git
+git clone https://github.com/gkzzhs/opckit.git
 cd opckit
 chmod +x install.sh
 ./install.sh
@@ -108,7 +107,7 @@ cp config/templates/designer.json config/templates/myindustry.json
 
 - **数据层：** SQLite（`~/.opckit/data/opckit.db`），三张表：clients / ledger / content_log
 - **配置层：** JSON 模板（`~/.opckit/config/`），首次使用时选择行业自动加载
-- **交互层：** OpenClaw SKILL.md（纯 Prompt 工程），通过 `uv run db.py` 调用数据操作
+- **交互层：** OpenClaw SKILL.md（纯 Prompt 工程），通过 `python3 {baseDir}/scripts/db.py` 调用数据操作
 - **通道层：** 企业微信机器人 / 微信 ClawBot
 
 ## 许可证

@@ -105,8 +105,9 @@ metadata:
 
 **执行流程：**
 1. 运行 `python3 {baseDir}/scripts/db.py ledger report --month {YYYY-MM}`
-2. 运行 `python3 {baseDir}/scripts/db.py client count`
-3. 综合分析，生成结构化月报（同上格式，但针对指定月份）
+2. 以该月份的财务数据为主生成结构化月报
+3. 不要默认调用 `python3 {baseDir}/scripts/db.py client count` 来充当历史月份客户数据，因为当前数据库无法还原某个月份的历史客户状态
+4. 如果用户额外想看客户情况，可以补充运行 `python3 {baseDir}/scripts/db.py client count`，但必须明确标注为"当前客户快照（非 {YYYY-MM} 历史口径）"
 
 ## 能力 4：晨报 / 晚报
 

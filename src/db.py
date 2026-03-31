@@ -132,6 +132,10 @@ def client_count(args):
 
 # ── ledger ──────────────────────────────────────────────
 def ledger_income(args):
+    if args.amount <= 0:
+        log("❌ amount 必须大于 0")
+        out({"ok": False, "error": "amount must be greater than 0"})
+        sys.exit(1)
     db = get_db()
     db.execute("INSERT INTO ledger (type,amount,client_name,note) VALUES ('income',?,?,?)",
                (args.amount, args.from_client, args.note))
@@ -140,6 +144,10 @@ def ledger_income(args):
     out({"ok": True, "type": "income", "amount": args.amount})
 
 def ledger_expense(args):
+    if args.amount <= 0:
+        log("❌ amount 必须大于 0")
+        out({"ok": False, "error": "amount must be greater than 0"})
+        sys.exit(1)
     db = get_db()
     db.execute("INSERT INTO ledger (type,amount,category,note) VALUES ('expense',?,?,?)",
                (args.amount, args.category, args.note))

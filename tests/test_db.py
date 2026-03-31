@@ -223,6 +223,32 @@ class DbCliTestCase(unittest.TestCase):
         self.assertEqual(records["returned"], 2)
         self.assertEqual([record["category"] for record in records["records"]], ["交通", "工具"])
 
+        failed_income, failed_income_data = self.run_cli(
+            "ledger",
+            "income",
+            "--amount",
+            "-1",
+            "--from",
+            "张总",
+            check=False,
+        )
+        self.assertNotEqual(failed_income.returncode, 0)
+        self.assertFalse(failed_income_data["ok"])
+        self.assertIn("greater than 0", failed_income_data["error"])
+
+        failed_expense, failed_expense_data = self.run_cli(
+            "ledger",
+            "expense",
+            "--amount",
+            "0",
+            "--category",
+            "工具",
+            check=False,
+        )
+        self.assertNotEqual(failed_expense.returncode, 0)
+        self.assertFalse(failed_expense_data["ok"])
+        self.assertIn("greater than 0", failed_expense_data["error"])
+
     def test_content_commands(self):
         _, added = self.run_cli(
             "content",
