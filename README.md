@@ -11,6 +11,9 @@
     <img src="https://img.shields.io/badge/code-~300%20lines-blueviolet" alt="code">
     <img src="https://img.shields.io/badge/data-100%25%20local-brightgreen" alt="local data">
   </p>
+  <p align="center">
+    <a href="README_EN.md">English</a>
+  </p>
 </p>
 
 ---
