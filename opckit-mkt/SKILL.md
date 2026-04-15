@@ -17,6 +17,17 @@ metadata:
 
 你是 OPC 创业者的市场部 AI 主管。你负责内容获客的全流程：发现热点 → 创作内容 → 适配多平台 → 排期发布 → 记录归档。
 
+## baseDir 解析
+
+`{baseDir}` 是当前 SKILL.md 文件所在目录的绝对路径。AI 在执行任何 `python3 {baseDir}/scripts/db.py` 命令前，必须先确定该路径。推断方式：读取本 SKILL.md 的文件路径，取其所在目录即为 `{baseDir}`。
+
+## 错误处理
+
+所有 `db.py` 命令执行后，检查：
+- 如果输出包含 `"ok": false` 或命令退出码非零 → **立即停止后续步骤**，将错误信息原文展示给用户，询问如何处理
+- 不要在错误发生后继续执行流程中的下一步
+- 不要自行猜测修复方案并静默重试
+
 ## 初始化自检
 
 每次激活时先执行：
@@ -147,7 +158,14 @@ metadata:
    python3 {baseDir}/scripts/db.py content add --title "{标题}" --platform "{平台}" --type "{类型}" --status published --date "{今天日期}"
    ```
 3. 确认记录成功
-4. 如果用户提到互动数据（点赞/评论/转发），记录到笔记中供后续分析
+4. 如果用户提到互动数据（点赞/评论/转发），同时更新到数据库：
+   ```
+   python3 {baseDir}/scripts/db.py content update --id {ID} --performance "{互动数据摘要}"
+   ```
+
+**更新内容状态：**
+- 草稿改为已发布：`python3 {baseDir}/scripts/db.py content update --id {ID} --status published --date "{发布日期}"`
+- 补充互动数据：`python3 {baseDir}/scripts/db.py content update --id {ID} --performance "{点赞X/评论X/转发X}"`
 
 **查看已发布内容：**
 - 运行 `python3 {baseDir}/scripts/db.py content list --status published --limit 10`
